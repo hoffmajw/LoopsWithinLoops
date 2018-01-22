@@ -3,15 +3,15 @@ This project demonstrates NESTED LOOPS (i.e., loops within loops)
 in the context of TWO-DIMENSIONAL GRAPHICS.
 
 Authors: David Mutchler, Valerie Galluzzi, Mark Hays, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Jaxon hoffman.
+"""  # Done 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 
 
 def main():
     """ Calls the other functions to demonstrate them. """
-    run_test_draw_L()
+    #run_test_draw_L()
     run_test_draw_wall_on_right()
 
 
@@ -79,8 +79,55 @@ def draw_L(window, circle, r, c):
       :type c: int
     and m and n are small, positive integers.
     """
+
+    color = circle.fill_color
+
+    for k in range(r + 3):
+        circle.attach_to(window)
+        window.render(.1)
+        circle = circle.clone()
+        circle.fill_color = color
+
+        for j in range(3):
+            circle = circle.clone()
+            circle.fill_color = color
+            circle.center.x = circle.center.x + 2*circle.radius
+            circle.attach_to(window)
+            window.render(.1)
+
+        circle.center.x = circle.center.x - 6 * circle.radius
+        circle.center.y = circle.center.y + 2*circle.radius
+        circle.attach_to(window)
+        window.render(.1)
+
+    circle.detach_from(window)
+    window.render()
+
+    circle.center.x = circle.center.x + 6 * circle.radius
+    circle.center.y -= 2 * circle.radius
+
+    for k in range(3):
+        circle.attach_to(window)
+        circle = circle.clone()
+        circle.fill_color = color
+
+        for j in range(c):
+            circle = circle.clone()
+            circle.fill_color = color
+            circle.center.x += 2 * circle.radius
+            circle.attach_to(window)
+            window.render(.1)
+
+        circle.center.x -= 2 * c * circle.radius
+        circle.center.y = circle.center.y - 2 * circle.radius
+        circle.attach_to(window)
+        window.render(.1)
+
+    circle.detach_from(window)
+    window.render()
+
     # ------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # Done 2. Implement and test this function.
     #     The testing code is already written for you (above).
     # ------------------------------------------------------------------
 
@@ -120,8 +167,38 @@ def draw_wall_on_right(rectangle, n, window):
       :type window: rg.RoseWindow
     and n is a small, positive integer.
     """
+
+    original_corner1 = rectangle.get_upper_left_corner()
+    original_corner2 = rectangle.get_lower_right_corner()
+    height = rectangle.get_height()
+    width = rectangle.get_width()
+
+    for k in range(n):
+        # rectangle.attach_to(window)
+
+        for j in range(k):
+            rectangle = rg.Rectangle(rg.Point(original_corner1.x - (j +
+                                                                    1) * width,
+                                              original_corner1.y + (k + 1) *
+                                              height),
+                                     rg.Point(original_corner2.x - (j +
+                                                                    1) * width,
+                                              original_corner2.y + (k + 1)
+                                              * height))
+            rectangle.attach_to(window)
+
+        rectangle = rg.Rectangle(rg.Point(original_corner1.x,
+                                          original_corner1.y + (k + 1) *
+                                          height),
+                                 rg.Point(original_corner2.x,
+                                          original_corner2.y + (k + 1)
+                                          * height))
+        rectangle.attach_to(window)
+
+    window.render()
+
     # ------------------------------------------------------------------
-    # TODO: 3. Implement and test this function.
+    # Done 3. Implement and test this function.
     #     The testing code is already written for you (above).
     # ------------------------------------------------------------------
 
